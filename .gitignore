@@ -1,0 +1,14 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Terraform lock (optional keep/remove)
+.terraform.lock.hcl
+
+# OS
+.DS_Store
+
+# Docker
+*.log
