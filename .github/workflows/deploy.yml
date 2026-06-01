@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -22,10 +23,16 @@ jobs:
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build, Tag, Push Backend
+    - name: Build Docker Image
       run: |
-        docker build -t backend ./backend/service1
-        docker tag backend:latest ${{ secrets.ECR_BACKEND }}
+        docker build -t backend-app ./backend/service1
+
+    - name: Tag Image
+      run: |
+        docker tag backend-app:latest ${{ secrets.ECR_BACKEND }}
+
+    - name: Push Image to ECR
+      run: |
         docker push ${{ secrets.ECR_BACKEND }}
 
     - name: Update kubeconfig
@@ -35,3 +42,4 @@ jobs:
     - name: Deploy to Kubernetes
       run: |
         kubectl apply -f k8s/base/
+        kubectl rollout restart deployment backend-app

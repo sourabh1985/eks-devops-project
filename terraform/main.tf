@@ -13,7 +13,7 @@ module "eks" {
   version = "~> 20.0"
 
   cluster_name    = "devops-eks"
-  cluster_version = "1.29"
+  cluster_version = "1.30"
 
   vpc_id     = data.aws_vpc.default.id
   subnet_ids = data.aws_subnets.default.ids
@@ -23,11 +23,13 @@ module "eks" {
 
   eks_managed_node_groups = {
     default = {
-      instance_types = ["t2.micro"]
+      instance_types = ["t3.small"]
 
       min_size     = 1
-      max_size     = 1
-      desired_size = 1
+      max_size     = 3
+      desired_size = 2
+      disk_size = 20
+      ami_type = "AL2_x86_64"
     }
   }
 
