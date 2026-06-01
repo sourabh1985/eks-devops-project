@@ -43,6 +43,7 @@ jobs:
       run: |
         kubectl apply -f k8s/base/
         kubectl rollout restart deployment backend   # ✅ fixed name
+        kubectl set image deployment/backend backend=${{ secrets.ECR_BACKEND }}:${{ github.sha }}
         kubectl rollout status deployment backend
 
     - name: Wait and Print Application URL
